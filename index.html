@@ -1,463 +1,91 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Atención Virtual – Internet | Caso Marcelo</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Atención Virtual – Versión Final</title>
   <style>
-    :root{
-      --bg:#0f172a;           /* slate-900 */
-      --card:#0b2630;         /* teal-ish dark */
-      --muted:#b6c2cf;        
-      --accent:#10b981;       /* emerald */
-      --accent-2:#34d399;
-      --cta:#25D366;          /* WhatsApp */
-      --warn:#f59e0b;         /* amber */
-      --danger:#ef4444;       /* red */
-      --ok:#22c55e;           /* green */
-      --edge:#1f2937;         /* gray-800 */
-    }
-    html,body{height:100%;}
-    body{
-      margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      background: radial-gradient(1000px 600px at 10% -10%, #123, transparent),
-                  radial-gradient(900px 500px at 120% 0%, #113, transparent),
-                  var(--bg);
-      color:#e5f0f7;
-    }
-    .container{max-width:1100px;margin:0 auto;padding:24px;}
-    .nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;}
-    .brand{display:flex;align-items:center;gap:12px}
-    .logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#14b8a6,#22c55e);display:grid;place-items:center;font-weight:800;color:#04302a}
-    .pill{border:1px solid #264b55;padding:6px 10px;border-radius:999px;color:#9dd6c3;background:#0b2831}
-
-    .hero{display:grid;grid-template-columns:1.2fr 1fr;gap:24px;align-items:center;margin-top:12px}
-    @media (max-width:920px){.hero{grid-template-columns:1fr}}
-    .card{background:linear-gradient(180deg, rgba(16,39,46,.9), rgba(9,27,34,.9)); border:1px solid #153a43; border-radius:18px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,.25)}
-    .title{font-size:clamp(28px,3.4vw,44px);line-height:1.05;margin:0 0 10px 0}
-    .subtitle{color:var(--muted);margin:6px 0 18px 0}
-    .row{display:flex;flex-wrap:wrap;gap:12px}
-    .btn{appearance:none;border:none;border-radius:12px;padding:12px 16px;font-weight:700;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:10px}
-    .btn:disabled{opacity:.6;cursor:not-allowed}
-    .btn-cta{background:var(--cta);color:#073b23}
-    .btn-primary{background:var(--accent);color:#052b25}
-    .btn-ghost{background:transparent;border:1px solid #224e59;color:#a9d5e2}
-    .btn-outline{background:#0b2831;border:1px solid #1f4952;color:#d6f3ff}
-    .kpi{display:flex;gap:12px;align-items:center;color:#a5f3fc}
-
-    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
-    .col-4{grid-column:span 4}
-    .col-6{grid-column:span 6}
-    .col-8{grid-column:span 8}
-    .col-12{grid-column:span 12}
-    @media (max-width:920px){.col-4,.col-6,.col-8{grid-column:span 12}}
-
-    .badge{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:#0e2a2f;border:1px solid #1e555f;color:#9ed9e6;font-weight:600}
-    .field{display:flex;flex-direction:column;gap:8px;margin:10px 0}
-    label{font-size:14px;color:#c7e6f4}
-    input, textarea, select{background:#0a2230;border:1px solid #254d5a;color:#e5f9ff;padding:12px;border-radius:12px;outline:none}
-    input[readonly]{opacity:.9}
-    textarea{min-height:120px;resize:vertical}
-
-    .steps{display:flex;flex-direction:column;gap:12px}
-    .step{display:flex;gap:12px;align-items:flex-start}
-    .dot{width:12px;height:12px;border-radius:50%;background:#2a4e58;margin-top:6px}
-    .step.active .dot{background:var(--accent)}
-    .step.done .dot{background:var(--ok)}
-    .step .label{font-weight:700}
-    .step .desc{color:#b7d8e6}
-
-    .toast{position:fixed;right:16px;bottom:16px;background:#072028;border:1px solid #164852;padding:12px 14px;border-radius:12px;box-shadow:0 20px 40px rgba(0,0,0,.35);display:none}
-
-    .stars{display:flex;gap:8px}
-    .star{font-size:22px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.4));cursor:pointer}
-    .star.on{color:#fbbf24}
-
-    .footer{color:#8fb8c5;opacity:.95;text-align:center;padding:30px 8px}
-    .qr{background:white;border-radius:10px;padding:8px;display:inline-block}
-    .muted{color:#a6c8d6}
-    .divider{height:1px;background:#173a44;margin:16px 0}
+    body{margin:0;font-family:Arial, sans-serif;background:#0f172a;color:#e5f0f7}
+    .header{position:sticky;top:0;z-index:10;background:#0b2831;padding:10px;display:flex;justify-content:space-between;align-items:center}
+    .progress{flex:1;height:8px;margin:0 10px;background:#123;border-radius:5px;overflow:hidden}
+    .progress>div{height:100%;width:0;background:#10b981;transition:width .3s}
+    .screen{display:none;min-height:100vh;padding:20px}
+    .screen.active{display:block}
+    .card{background:#0b2831;border:1px solid #18424b;border-radius:12px;padding:20px;margin:20px 0}
+    .field{margin-bottom:12px}
+    label{display:block;margin-bottom:4px;color:#9ed9e6}
+    input,select,textarea{width:100%;padding:10px;border-radius:8px;background:#0a2230;color:#fff;border:none}
+    .btn{padding:12px 16px;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
+    .btn-primary{background:#10b981;color:#052b25}
+    .btn-ghost{background:transparent;border:1px solid #1e4e59;color:#d5f5ff}
   </style>
 </head>
 <body>
-  <div class="container">
-    <nav class="nav">
-      <div class="brand">
-        <div class="logo">IV</div>
-        <div>
-          <div style="font-weight:800">Internet Virtual</div>
-          <div class="muted" style="font-size:12px">Atención 100% online – sin repeticiones</div>
-        </div>
-      </div>
-      <div class="pill">Soporte en vivo • 08–20h</div>
-    </nav>
 
-    <section class="hero">
-      <div class="card">
-        <h1 class="title">¿Problemas con tu internet? Resolvelo en <span style="color:var(--accent-2)">un solo contacto</span>.</h1>
-        <p class="subtitle">Usamos la información que ya tenemos de vos. Podés contar el problema con texto o <b>audio</b>, ver el <b>tiempo estimado</b> y seguir todo en vivo.
-        </p>
-        <div class="row" style="margin:12px 0 18px 0">
-          <a id="ctaWa" class="btn btn-cta" href="#" target="_blank" rel="noopener">
-            📲 Iniciar por WhatsApp
-          </a>
-          <button class="btn btn-outline" onclick="document.getElementById('webFlow').scrollIntoView({behavior:'smooth'})">Resolver desde la web</button>
-        </div>
-        <div class="row kpi">
-          <span class="badge">⏱ ETA inicial: <b id="etaKpi">–</b></span>
-          <span class="badge">🧾 Sin volver a cargar datos</span>
-          <span class="badge">🗣 Audio + transcripción</span>
-        </div>
-      </div>
-      <div class="card">
-        <div class="field"><label>Tu perfil (prefill simulado)</label>
-          <div class="grid">
-            <div class="col-6"><input id="name" value="Marcelo Gómez" readonly/></div>
-            <div class="col-6"><input id="city" value="Lanús, Buenos Aires" readonly/></div>
-            <div class="col-6"><input id="plan" value="Fibra 300 Mb" readonly/></div>
-            <div class="col-6"><input id="clientId" value="#CLI-29834" readonly/></div>
-          </div>
-          <small class="muted">Estos datos se completan automáticamente al reconocerte por tu número. No necesitás volver a informarlos.</small>
-        </div>
-        <div class="divider"></div>
-        <div class="field"><label>Estado del servicio (simulado)</label>
-          <div class="steps" id="statusPreview">
-            <div class="step active"><div class="dot"></div><div><div class="label">Conectividad detectada</div><div class="desc">Sin cortes generales en tu zona.</div></div></div>
-            <div class="step"><div class="dot"></div><div><div class="label">Diagnóstico de tu equipo</div><div class="desc">Listo para iniciar reinicio remoto si es necesario.</div></div></div>
-          </div>
-        </div>
-      </div>
-    </section>
+<div class="header">
+  <span>Atención Virtual</span>
+  <div class="progress"><div id="progressBar"></div></div>
+  <span id="stepLabel">Paso 1 de 4</span>
+</div>
 
-    <section id="webFlow" style="margin-top:28px" class="grid">
-      <div class="col-8 card">
-        <h2 style="margin:0 0 6px 0">1) Contanos qué pasa</h2>
-        <p class="subtitle">Usá texto o grabá un audio. Transcribimos automáticamente para que confirmes si se entendió bien.</p>
-
-        <div class="field">
-          <label>Descripción breve</label>
-          <textarea id="desc" placeholder="Ej.: La conexión se corta cada 10 minutos desde anoche"></textarea>
-        </div>
-
-        <div class="row" style="align-items:center">
-          <button id="btnRec" class="btn btn-primary">🎙️ Grabar audio</button>
-          <audio id="audioPlayer" controls style="display:none"></audio>
-          </div>
-        <small class="muted">Tip: si grabás audio, lo <b>transcribimos automáticamente</b> para que confirmes si se entendió bien.</small>
-        <div id="transcriptBox" class="field" style="display:none">
-          <label>Transcripción (podés editarla)</label>
-          <textarea id="transcript"></textarea>
-        </div>
-
-        <div class="divider"></div>
-        <div class="row">
-          <button id="btnOpenCase" class="btn btn-primary">Abrir caso</button>
-          <button id="btnWaPrefill" class="btn btn-ghost">Abrir WhatsApp con mi mensaje</button>
-        </div>
-        <small class="muted">Tip: si preferís WhatsApp, abrimos el chat con el texto prellenado y tu ID de caso.</small>
-      </div>
-
-      <div class="col-4 card">
-        <h3 style="margin:0 0 12px 0">Seguimiento en vivo</h3>
-        <div class="steps" id="steps">
-          <div class="step" data-key="open"><div class="dot"></div><div><div class="label">Caso abierto</div><div class="desc">Creando tu ID y estimando tiempo…</div></div></div>
-          <div class="step" data-key="diag"><div class="dot"></div><div><div class="label">Diagnóstico</div><div class="desc">Chequeando red de zona y equipo…</div></div></div>
-          <div class="step" data-key="plan"><div class="dot"></div><div><div class="label">Plan propuesto</div><div class="desc" id="planDesc"></div></div></div>
-          <div class="step" data-key="action"><div class="dot"></div><div><div class="label">Ejecución</div><div class="desc">Aplicando reinicio (2–3 min)…</div></div></div>
-          <div class="step" data-key="done"><div class="dot"></div><div><div class="label">Listo</div><div class="desc">Conexión restablecida.</div></div></div>
-        </div>
-        <div class="divider"></div>
-        <div class="row">
-          <button id="btnAccept" class="btn btn-primary" disabled>ACEPTAR</button>
-          <button id="btnChat" class="btn btn-outline" disabled>CONVERSAR</button>
-        </div>
-        <small class="muted">Podés aceptar el plan o chatear con un agente antes de aplicarlo.</small>
-        <div class="divider"></div>
-        <button id="btnReprogram" class="btn btn-ghost" disabled>Reprogramar revisión por videollamada</button>
-      </div>
-    </section>
-
-    <section class="grid" style="margin-top:20px">
-      <div class="col-8 card">
-        <h2 style="margin:0 0 6px 0">Cierre y feedback</h2>
-        <p class="subtitle">Cuando finalice, vas a poder reabrir con un clic si “No quedó resuelto”.</p>
-        <div class="row" style="gap:10px;align-items:center">
-          <button id="btnNotSolved" class="btn btn-outline" disabled>❗ No quedó resuelto</button>
-          <span class="badge">ID: <b id="caseId">—</b></span>
-          <span class="badge">ETA: <b id="eta">—</b></span>
-        </div>
-        <div class="divider"></div>
-        <div class="field">
-          <label>¿Guardamos esta conversación en tu historial?</label>
-          <select id="consent"><option value="yes">Sí</option><option value="no">No</option></select>
-        </div>
-        <div class="field">
-          <label>Valorar atención</label>
-          <div class="stars" id="stars">
-            <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
-          </div>
-        </div>
-      </div>
-      <div class="col-4 card">
-        <h3 style="margin:0 0 10px 0">También podés</h3>
-        <div class="row" style="gap:10px;align-items:center">
-          <div class="qr" id="qrBox"><canvas id="qr"></canvas></div>
-          <div>
-            <div class="muted" style="font-size:14px">Escaneá para abrir WhatsApp</div>
-            <a id="waDeep" class="btn btn-cta" href="#" target="_blank" rel="noopener">Abrir WhatsApp</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <footer class="footer">© Internet Virtual – Prototipo académico (sin backend). Listo para integrar APIs de WhatsApp, Speech-to-Text y CRM.</footer>
+<section id="s1" class="screen active">
+  <h2>¿Problemas con tu internet? Resolvelo en un solo contacto.</h2>
+  <div class="card">
+    <h3>Tu perfil</h3>
+    <div class="field"><label>Nombre</label><input value="Marcelo Gómez" readonly></div>
+    <div class="field"><label>Ciudad</label><input value="Lanús, Buenos Aires" readonly></div>
+    <div class="field"><label>Plan contratado</label>
+      <select>
+        <option>Fibra 100 Mb</option>
+        <option selected>Fibra 300 Mb</option>
+        <option>Fibra 600 Mb</option>
+        <option>Fibra 1 Gb</option>
+      </select>
+    </div>
+    <div class="field"><label>ID Cliente</label><select><option>#CLI-29834</option></select></div>
+    <p><b>Tiempo estimado: 4 min</b></p>
   </div>
+  <button class="btn btn-primary" onclick="goTo(2)">Continuar</button>
+</section>
 
-  <div class="toast" id="toast"></div>
+<section id="s2" class="screen">
+  <h2>1) Contanos qué pasa</h2>
+  <textarea placeholder="Ej.: La conexión se corta cada 10 minutos desde anoche"></textarea>
+  <div style="margin-top:12px"><button class="btn btn-primary" onclick="goTo(3)">Abrir caso</button></div>
+</section>
 
-  
+<section id="s3" class="screen">
+  <h2>2) Seguimiento en vivo</h2>
+  <div class="card">
+    <p><b>Caso abierto</b>: Creando tu ID...</p>
+    <p><b>Diagnóstico</b>: Chequeando red...</p>
+    <p><b>Plan propuesto</b>: Reinicio remoto del módem.</p>
+    <p><b>Ejecución</b>: Aplicando reinicio (2-3 min)...</p>
+    <p><b>Listo</b>: Conexión restablecida.</p>
+  </div>
+  <button class="btn btn-primary" onclick="goTo(4)">Continuar al cierre</button>
+</section>
+
+<section id="s4" class="screen">
+  <h2>3) Cierre y feedback</h2>
+  <p>¿Guardamos esta conversación en tu historial?</p>
+  <select><option>Sí</option><option>No</option></select>
+  <p style="margin-top:12px">Valorar atención:</p>
+  <p>⭐⭐⭐⭐⭐</p>
+  <button class="btn btn-primary" onclick="thanks()">Finalizar</button>
+</section>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-  // --- Helpers ---
-  const $ = (sel)=>document.querySelector(sel);
-  function toast(msg){
-    const t = $('#toast'); if(!t) return;
-    t.innerHTML = String(msg) + ' <button id="toastClose" style="margin-left:12px;background:transparent;border:1px solid #2b5863;border-radius:8px;padding:2px 8px;color:#9ed9e6;cursor:pointer">×</button>';
-    t.style.display = 'block';
-    const btn = $('#toastClose'); if(btn){ btn.onclick = ()=> t.style.display='none'; }
-  }
-  function setStep(key, state){
-    const el = document.querySelector(`.step[data-key="${key}"]`);
-    if(!el) return;
-    el.classList.remove('active','done');
-    if(state==='active') el.classList.add('active');
-    if(state==='done') el.classList.add('done');
-  }
-
-  // --- WhatsApp utils ---
-  const WA_NUMBER = '+5401144050821';
-  function waLink(text){
-    const clean = WA_NUMBER.replace(/\D/g,'');
-    return `https://wa.me/${clean}?text=${encodeURIComponent(text)}`;
-  }
-  const baseMsg = 'Hola, tengo problemas con mi internet. Quiero abrir un caso.';
-  if($('#ctaWa')) $('#ctaWa').href = waLink(baseMsg);
-  if($('#waDeep')) $('#waDeep').href = waLink(baseMsg);
-
-  // --- Plan -> IDs ---
-  const PLAN_IDS = {
-    'Fibra 100 Mb': ['#CLI-29112', '#CLI-29176', '#CLI-29208'],
-    'Fibra 300 Mb': ['#CLI-29834', '#CLI-29891', '#CLI-29902'],
-    'Fibra 600 Mb': ['#CLI-30544', '#CLI-30587', '#CLI-30610'],
-    'Fibra 1 Gb': ['#CLI-31990', '#CLI-32011', '#CLI-32056']
-  };
-  const planSel = document.getElementById('planSelect') || document.getElementById('plan');
-  const clientSel = document.getElementById('clientId');
-  function populateClientIds(){
-    if(!planSel || !clientSel) return;
-    const opts = PLAN_IDS[planSel.value] || [];
-    clientSel.innerHTML = opts.map(v=>`<option>${v}</option>`).join('');
-  }
-  if(planSel){ planSel.addEventListener('change', populateClientIds); populateClientIds(); }
-
-  // --- Audio + auto-transcripción ---
-  let mediaRecorder, chunks=[];
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  const rec = SR ? new SR() : null;
-  let recActive = false;
-  const btnRec = $('#btnRec');
-  const audioPlayer = $('#audioPlayer');
-  if(rec){ rec.lang='es-AR'; rec.interimResults=false; rec.maxAlternatives=1;
-    rec.onresult = (e)=>{
-      const txt = e.results[0][0].transcript || '';
-      const box = $('#transcriptBox'); const ta = $('#transcript'); const desc = $('#desc');
-      if(box) box.style.display='block';
-      if(ta) ta.value = txt;
-      if(desc && !desc.value) desc.value = txt;
-    };
-    rec.onend = ()=>{ recActive = false; };
-  }
-  async function startRec(){
-    try{
-      const stream = await navigator.mediaDevices.getUserMedia({audio:true});
-      mediaRecorder = new MediaRecorder(stream); chunks=[];
-      mediaRecorder.ondataavailable = e=> chunks.push(e.data);
-      mediaRecorder.onstop = ()=>{
-        const blob = new Blob(chunks, {type:'audio/webm'});
-        const url = URL.createObjectURL(blob);
-        if(audioPlayer){ audioPlayer.src = url; audioPlayer.style.display='block'; }
-        if(!rec){
-          const box = $('#transcriptBox'); const ta = $('#transcript'); const desc = $('#desc');
-          if(box) box.style.display='block';
-          if(ta && !ta.value) ta.value = '(Transcripción simulada del audio)';
-          if(desc && !desc.value && ta) desc.value = ta.value;
-        }
-        toast('Audio grabado');
-      };
-      mediaRecorder.start();
-      if(btnRec) btnRec.textContent='⏹️ Detener';
-      try{ if(rec && !recActive){ recActive = true; rec.start(); } }catch(e){}
-    }catch(e){ toast('No pudimos acceder al micrófono'); }
-  }
-  function stopRec(){
-    if(mediaRecorder){ try{ mediaRecorder.stop(); }catch{} }
-    if(btnRec) btnRec.textContent='🎙️ Grabar audio';
-    if(recActive && rec){ try{ rec.stop(); }catch{} recActive=false; }
-  }
-  if(btnRec){
-    btnRec.addEventListener('click', ()=>{
-      if(!mediaRecorder || mediaRecorder.state==='inactive') startRec();
-      else stopRec();
-    });
-  }
-
-  // --- Flujo del caso (pausando en PLAN) ---
-  let CASE_ID = null;
-  const stepOrder = ['open','diag','plan','action','done'];
-  function resetSteps(){ stepOrder.forEach(k=> setStep(k,'')); }
-  function progressFlow(){
-    resetSteps();
-    let i=0;
-    (function run(){
-      if(i>0) setStep(stepOrder[i-1], 'done');
-      if(i<stepOrder.length){
-        setStep(stepOrder[i], 'active');
-        if(stepOrder[i]==='plan'){
-          const a=$('#btnAccept'), c=$('#btnChat');
-          if(a) a.disabled=false; if(c) c.disabled=false;
-          const pd=document.getElementById('planDesc'); if(pd) pd.textContent='Reinicio remoto del módem.';
-          return; // pausa hasta ACEPTAR/CONVERSAR
-        }
-        setTimeout(run, 4000);
-        i++;
-      } else {
-        const closureEl = document.getElementById('closure'); if(closureEl){ closureEl.scrollIntoView({behavior:'smooth'}); }
-      }
-    })();
-  }
-
-  // --- Apertura de caso ---
-  const openCaseBtn = document.getElementById('btnOpenCase');
-  if(openCaseBtn){
-    openCaseBtn.addEventListener('click', ()=>{
-      const text = ($('#transcript')?.value || $('#desc')?.value || '').trim();
-      if(!text){ toast('Contanos brevemente el problema'); return; }
-      CASE_ID = 'CAS-' + Math.random().toString(36).slice(2,8).toUpperCase();
-      const cid = $('#caseId'); if(cid) cid.textContent = CASE_ID;
-      toast('Caso ' + CASE_ID + ' abierto');
-      progressFlow();
-    });
-  }
-
-  const waPrefill = document.getElementById('btnWaPrefill');
-  if(waPrefill){
-    waPrefill.addEventListener('click', ()=>{
-      const text = ($('#transcript')?.value || $('#desc')?.value || 'Tengo problemas con mi internet.').trim();
-      const msg = `Hola, necesito ayuda. ID ${CASE_ID||'NUEVO'}. ${text}`;
-      window.open(waLink(msg),'_blank');
-    });
-  }
-
-  // --- ACEPTAR / CONVERSAR ---
-  const btnAccept = document.getElementById('btnAccept');
-  const btnChat = document.getElementById('btnChat');
-  if(btnAccept){
-    btnAccept.addEventListener('click', ()=>{
-      toast('Plan aceptado: aplicando reinicio…');
-      setStep('plan','done'); setStep('action','active');
-      startEtaVisual(12);
-    });
-  }
-  if(btnChat){
-    btnChat.addEventListener('click', ()=>{
-      const msg = `Hola, quiero conversar antes de aceptar el plan para el caso ${CASE_ID||'NUEVO'}.`;
-      window.open(waLink(msg),'_blank');
-    });
-  }
-
-  // --- ETA + cierre ---
-  function startEtaVisual(seconds){
-    const bar = document.getElementById('etaBar');
-    const cd = document.getElementById('etaCountdown');
-    let total=seconds, left=seconds;
-    if(cd) cd.textContent = left + ' s';
-    const tick = setInterval(()=>{
-      left--; const pct = Math.round(((total-left)/total)*100);
-      if(bar) bar.style.width = pct + '%';
-      if(cd) cd.textContent = left + ' s';
-      if(left<=0){
-        clearInterval(tick);
-        setStep('action','done'); setStep('done','active');
-        const closureEl = document.getElementById('closure'); if(closureEl){ closureEl.scrollIntoView({behavior:'smooth'}); }
-        const closure = document.getElementById('closure');
-        if(closure){
-          const confirmMsg = document.createElement('div');
-          confirmMsg.style.marginTop='20px'; confirmMsg.style.padding='12px';
-          confirmMsg.style.background='#0a2230'; confirmMsg.style.border='1px solid #254d5a'; confirmMsg.style.borderRadius='12px';
-          confirmMsg.innerHTML = '<strong>✔ Consulta cerrada:</strong> Tu caso quedó resuelto correctamente.';
-          closure.appendChild(confirmMsg);
-        }
-        const btnNS = document.getElementById('btnNotSolved');
-        if(btnNS) btnNS.disabled = false;
-      }
-    }, 1000);
-  }
-
-  // --- Reprogramar ---
-  const btnReprogram = document.getElementById('btnReprogram');
-  if(btnReprogram){
-    btnReprogram.addEventListener('click', ()=>{
-      const when = prompt('Elegí día y hora (ej.: 2025-09-22 18:30)');
-      if(when){ toast('Videollamada programada para ' + when); }
-    });
-  }
-
-  // --- No quedó resuelto ---
-  const btnNotSolved = document.getElementById('btnNotSolved');
-  if(btnNotSolved){
-    btnNotSolved.addEventListener('click', ()=>{
-      const msg = `Reabro el caso ${CASE_ID||'NUEVO'}. No quedó resuelto.`;
-      window.open(waLink(msg),'_blank');
-      toast('Abrimos WhatsApp para continuar la asistencia.');
-    });
-  }
-
-  // --- Rating -> Muchas gracias ---
-  document.querySelectorAll('.star').forEach((s,idx,arr)=>{
-    s.addEventListener('click',()=>{
-      arr.forEach((x,i)=> x.classList.toggle('on', i<=idx));
-      const rating = idx+1;
-      toast('Gracias por tu valoración: ' + rating + '/5');
-      setTimeout(()=>{
-        const msg = document.createElement('div');
-        msg.style.minHeight='100vh'; msg.style.display='grid'; msg.style.placeItems='center'; msg.style.background='var(--bg)';
-        msg.innerHTML = '<div style="text-align:center;max-width:760px;padding:24px">'
-          + '<h1 style="margin:0 0 12px 0; font-size:42px">¡Muchas gracias!</h1>'
-          + '<p style="color:#b6c2cf;font-size:18px">Tu consulta fue <b>cerrada</b> y registramos tu valoración <b>' + rating + '/5</b>.<br/>Podés volver cuando lo necesites.</p>'
-          + '</div>';
-        document.body.innerHTML = ''; document.body.appendChild(msg);
-      }, 600);
-    });
-  });
-
-  // --- QR fallback ---
-  function drawPseudoQR(text){
-    const c = document.getElementById('qr'); if(!c) return;
-    const ctx = c.getContext('2d'); const size = 120; c.width=size; c.height=size;
-    ctx.fillStyle='#fff'; ctx.fillRect(0,0,size,size);
-    let seed = 0; for(let i=0;i<text.length;i++) seed = (seed*31 + text.charCodeAt(i))>>>0;
-    function rnd(){ seed = (1103515245*seed+12345) & 0x7fffffff; return seed/0x7fffffff }
-    const n=24, cell=size/n;
-    for(let y=0;y<n;y++) for(let x=0;x<n;x++){
-      if((x<5&&y<5)||(x>n-6&&y<5)||(x<5&&y>n-6)) { ctx.fillStyle='#000'; ctx.fillRect(x*cell,y*cell,cell,cell); continue; }
-      if(rnd()>.65){ ctx.fillStyle='#000'; ctx.fillRect(x*cell,y*cell,cell,cell); }
-    }
-  }
-  if($('#ctaWa')) drawPseudoQR($('#ctaWa').href);
-});
+function goTo(step){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s'+step).classList.add('active');
+  document.getElementById('stepLabel').textContent="Paso "+step+" de 4";
+  document.getElementById('progressBar').style.width=(step-1)/3*100+"%";
+}
+function thanks(){
+  document.body.innerHTML='<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0f172a;color:#fff;font-size:24px"><div>¡Muchas gracias! Tu consulta fue cerrada.</div></div>';
+}
 </script>
-
 
 </body>
 </html>
